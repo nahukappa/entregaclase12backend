@@ -20,13 +20,13 @@
     <script>
         const socket = io();
 
-        // Referencias al DOM
+        //referencias al DOM
         const productList = document.getElementById('product-list');
         const productForm = document.getElementById('product-form');
         const productName = document.getElementById('product-name');
         const productPrice = document.getElementById('product-price');
 
-        // Actualizar lista de productos
+        //actualizar lista de productos
         socket.on('updateProducts', (products) => {
             productList.innerHTML = '';
             products.forEach((product, index) => {
@@ -61,7 +61,7 @@
     // Escuchar cuando los productos cambian
     socket.on('productos', (productos) => {
         const productList = document.querySelector('ul');
-        productList.innerHTML = '';  // Limpiar la lista
+        productList.innerHTML = '';  //limpiar la lista
         productos.forEach(product => {
             const li = document.createElement('li');
             li.innerHTML = `${product.name} - $${product.price} 
@@ -73,7 +73,7 @@
         });
     });
 </script>
-        // Enviar nuevo producto al servidor
+        //enviar nuevo producto al servidor
         productForm.onsubmit = (e) => {
             e.preventDefault();
             const product = {

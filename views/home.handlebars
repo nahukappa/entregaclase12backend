@@ -20,15 +20,15 @@
     {{/each}}
 </ul>
 
-<!-- WebSocket Cliente -->
+<!--websocket cliente -->
 <script src="/socket.io/socket.io.js"></script>
 <script>
     const socket = io();
 
-    // Escuchar cuando los productos cambian
+    //escuchar cuando los productos cambian
     socket.on('productos', (productos) => {
         const productList = document.querySelector('ul');
-        productList.innerHTML = '';  // Limpiar la lista
+        productList.innerHTML = '';  //limpiar la lista
         productos.forEach(product => {
             const li = document.createElement('li');
             li.innerHTML = `${product.name} - $${product.price} 
@@ -40,7 +40,7 @@
         });
     });
 
-    // Enviar producto nuevo
+    //enviar producto nuevo
     document.querySelector('form').addEventListener('submit', (e) => {
         e.preventDefault();
         const name = e.target.name.value;
