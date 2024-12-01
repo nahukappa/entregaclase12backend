@@ -16,6 +16,21 @@ app.set('views', './views');
 const server = http.createServer(app);
 const io = socketIo(server);
 
+// Emitir lista de productos a los clientes conectados
+io.on('connection', (socket) => {
+    console.log('Un cliente se ha conectado');
+    socket.emit('productos', products);  // Enviar productos al cliente
+
+    socket.on('disconnect', () => {
+        console.log('Un cliente se ha desconectado');
+    });
+});
+
+// Ruta para la página de productos en tiempo real
+app.get('/realtimeproducts', (req, res) => {
+    res.render('realTimeProducts', { products });
+});
+
 // Middleware para poder leer datos de formularios
 app.use(express.urlencoded({ extended: true }));
 
@@ -57,10 +72,13 @@ app.post('/add-product', (req, res) => {
 
 // Ruta para eliminar un producto
 app.post('/delete-product', (req, res) => {
-    const { name } = req.body;
-    products = products.filter(product => product.name !== name);
-    res.redirect('/');
+    const productName = req.body.name;
+    // Eliminar el producto del array 'products'
+    products = products.filter(product => product.name !== productName);
+    io.emit('productos', products);  // Enviar lista actualizada a todos los clientes
+    res.redirect('/realtimeproducts');  // Redirigir de nuevo a la página en tiempo real
 });
+
 
 // Iniciar servidor con socket.io
 server.listen(3000, () => {

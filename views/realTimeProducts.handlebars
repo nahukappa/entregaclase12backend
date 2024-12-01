@@ -41,7 +41,38 @@
                 productList.appendChild(li);
             });
         });
+<ul>
+    {{#each products}}
+        <li>
+            {{this.name}} - ${{this.price}} 
+            <form action='/delete-product' method='POST' style='display:inline;'>
+                <input type='hidden' name='name' value='{{this.name}}' />
+                <button type='submit'>Eliminar</button>
+            </form>
+        </li>
+    {{/each}}
+</ul>
 
+<!-- WebSocket Cliente -->
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+
+    // Escuchar cuando los productos cambian
+    socket.on('productos', (productos) => {
+        const productList = document.querySelector('ul');
+        productList.innerHTML = '';  // Limpiar la lista
+        productos.forEach(product => {
+            const li = document.createElement('li');
+            li.innerHTML = `${product.name} - $${product.price} 
+                <form action='/delete-product' method='POST' style='display:inline;'>
+                    <input type='hidden' name='name' value='${product.name}' />
+                    <button type='submit'>Eliminar</button>
+                </form>`;
+            productList.appendChild(li);
+        });
+    });
+</script>
         // Enviar nuevo producto al servidor
         productForm.onsubmit = (e) => {
             e.preventDefault();
